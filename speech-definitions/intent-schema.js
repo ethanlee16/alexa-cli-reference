@@ -12,6 +12,15 @@
                "type": "LITERAL"
             }
          ]
+      },
+      {
+         "intent": "AskForAuthor",
+         "slots": [
+            {
+               "name": "Command",
+               "type": "LITERAL"
+            }
+         ]
       }
    ]
 }

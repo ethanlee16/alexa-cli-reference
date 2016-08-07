@@ -18,6 +18,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use((req, res, next) => console.log(req.body, next()));
+
 // Verify incoming Alexa requests
 app.use((req, res, next) => {
   if (!req.headers.signaturecertchainurl) {
@@ -32,7 +34,7 @@ app.use((req, res, next) => {
 });
 
 alexaApp.launch((req, res) => {
-  res.say("Welcome to Alexa!");
+  res.say("Welcome to the Developer Toolbelt!");
 });
 
 for (var intent in speech) {

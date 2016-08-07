@@ -2,7 +2,12 @@ ListSupportedCommands	what commands do you support
 ListSupportedCommands	what commands are supported
 ListSupportedCommands	what commands do you know
 ListSupportedCommands	what unix commands do you know
-ExplainCommand	what does the {cmd|Command} command do
-ExplainCommand	explain the {cmd|Command} command
-ExplainCommand	tell me about the {cmd|Command} command
-ExplainCommand	how do i use the {cmd|Command} command
+ExplainCommand	what does the {COMMAND|Command} command do
+ExplainCommand	explain the {COMMAND|Command} command
+ExplainCommand	tell me about the {COMMAND|Command} command
+ExplainCommand	how do i use the {COMMAND|Command} command
+AskForAuthor	who made the {COMMAND|Command} command
+AskForAuthor	who wrote the {COMMAND|Command} command
+AskForAuthor	who maintains the {COMMAND|Command} command
+AskForAuthor	who started the {COMMAND|Command} command
+AskForAuthor	who wrote {COMMAND|Command}

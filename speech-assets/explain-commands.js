@@ -3,9 +3,9 @@ module.exports = {
 		"Command": "LITERAL"
 	},
 	"utterances": [
-		"what does the {cmd|Command} command do",
-		"explain the {cmd|Command} command",
-		"tell me about the {cmd|Command} command",
-		"how do i use the {cmd|Command} command"
+		"what does the {COMMAND|Command} command do",
+		"explain the {COMMAND|Command} command",
+		"tell me about the {COMMAND|Command} command",
+		"how do i use the {COMMAND|Command} command"
 	]
 }
