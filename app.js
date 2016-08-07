@@ -5,9 +5,13 @@ var bodyParser = require('body-parser');
 var alexa = require('alexa-app');
 var alexaApp = new alexa.app('alexa-cli-reference');
 var verifier = require('alexa-verifier');
+var speech = require('./speech-assets');
+var handlers = require('./speech-handlers');
+var fs = require('fs');
 
 var app = express();
 app.set('view engine', 'pug');
+var IS_DEV = app.get('env') === 'development';
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -15,13 +19,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Verify incoming Alexa requests
-app.use(function(req, res, next) {
+app.use((req, res, next) => {
   if (!req.headers.signaturecertchainurl) {
     return next();
   }
-  var { signaturecertchainurl, signature } = req.headers;
-  verifier(signaturecertchainurl, signature, req.body, (err) => {
+  var { signaturecertchainurl: cert, signature } = req.headers;
+  verifier(cert, signature, JSON.stringify(req.body), (err) => {
     if (err) return next(err);
+    console.log("Verified Alexa request!");
     next();
   });
 });
@@ -29,6 +34,12 @@ app.use(function(req, res, next) {
 alexaApp.launch((req, res) => {
   res.say("Welcome to Alexa!");
 });
+
+for (var intent in speech) {
+  console.log("Registering " + intent + " intent");
+  alexaApp.intent(intent, speech[intent], handlers[intent]);
+}
+
 alexaApp.express(app, "/alexa/");
 
 // catch 404 and forward to error handler
@@ -38,8 +49,24 @@ app.use(function(req, res, next) {
   next(err);
 });
 
-if (app.get('env') === 'development') {
-  app.use(function(err, req, res, next) {
+if (IS_DEV) {
+  fs.writeFile(
+    path.join(__dirname, 'speech-definitions/intent-schema.js'), 
+    alexaApp.schema(), (err) => {
+      if (err) return console.error("Failed to write schema.", err);
+      console.log("Schema written to speech-definitions/intent-schema.js.");
+  });
+
+  fs.writeFile(
+    path.join(__dirname, 'speech-definitions/utterances.txt'),
+    alexaApp.utterances(), (err) => {
+      if (err) return console.error("Failed to write utterances.", err);
+      console.log("Utterances written to speech-definitions/utterances.txt");
+    }
+  )
+
+  app.use((err, req, res, next) => {
+    console.error(err);
     res.status(err.status || 500);
     res.render('error', {
       message: err.message,
@@ -48,7 +75,7 @@ if (app.get('env') === 'development') {
   });
 }
 
-app.use(function(err, req, res, next) {
+app.use((err, req, res, next) => {
   res.status(err.status || 500);
   res.render('error', {
     message: err.message,
