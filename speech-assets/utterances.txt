@@ -1,0 +1,6 @@
+ListSupportedCommands what commands do you support
+ListSupportedCommands what commands do you know	
+ListSupportedCommands what unix commands do you know
+ExplainCommand what does the {Command} command do
+ExplainCommand explain the {Command} command
+ExplainCommand tell me about the {Command} command
